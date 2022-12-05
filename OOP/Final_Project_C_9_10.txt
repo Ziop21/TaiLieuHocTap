@@ -1,0 +1,41 @@
+        private const string CREATE_LINEITEM = "Insert Into LineItem values(@orderId, @productId, @quantity, @price)";
+        private const string UPDATE_TOTAL = "Update Orders Set total = @total Where orther_id = @ortherId";
+        // chức năng 9
+        public bool AddLineItem(LineItem lineItem)
+        {
+            using SqlConnection conn = Common.GetSqlConnection();
+            using SqlCommand cmd = Common.GetSqlCommand(CREATE_LINEITEM, conn);
+                // mở chuỗi kết nối
+                  conn.Open();
+                cmd.Parameters.AddRange(new[]
+                {
+                    new SqlParameter("@orderId", lineItem.OrderId),
+                    new SqlParameter("@productId", lineItem.ProductId),
+                    new SqlParameter("@quantity", lineItem.Quantity),
+                    new SqlParameter("@price", lineItem.Price)
+                });
+                if (cmd.ExecuteNonQuery() < 0)
+                    return false;
+                else
+                    return true;
+        }
+        // chức năng 10
+        public bool UpdateOrtherTotal(int ortherId)
+        {
+            using SqlConnection conn = Common.GetSqlConnection();
+            using SqlCommand cmd = Common.GetSqlCommand(UPDATE_TOTAL, conn);
+            conn.Open();
+            // goi bien total 
+            double total;
+            Console.WriteLine("Enter Total for ID: {0}", ortherId);
+            total = double.Parse(Console.ReadLine());
+            cmd.Parameters.AddRange(new[]
+            {
+                new SqlParameter("@ortherId", ortherId),
+                new SqlParameter("@total",total)
+            });
+            if (cmd.ExecuteNonQuery() < 0)
+                return false;
+            else
+                return true;
+        }

@@ -1,0 +1,41 @@
+use SMS
+go
+create table Customer(
+	customer_id int identity(1,1) primary key,
+	customer_name nvarchar(100)
+)
+go
+create table Employee(
+	employee_id int identity(1,1) primary key,
+	employee_name nvarchar(100),
+	salary float,
+	supervisor_id int,
+)
+go
+create table Product(
+	product_id int identity(1,1) primary key,
+	product_name nvarchar(100),
+	product_price float,
+)
+create table Orders(
+	order_id int identity (1,1) primary key,
+	oder_date datetime,
+	customer_id int,
+	employee_id int,
+	total float,
+	constraint fk_Orders_Customer
+	foreign key(customer_id) references Customer(customer_id) on delete cascade on update cascade,
+	constraint fk_Orders_Employee
+	foreign key(employee_id) references Employee(employee_id) on delete cascade on update cascade,
+)
+go
+create table LineItem(
+	order_id int,
+	product_id int,
+	quantity int,
+	price float,
+	constraint fk_Item_Order
+	foreign key(order_id) references Orders(order_id) on delete cascade on update cascade,
+	constraint fk_Item_Product
+	foreign key(product_id) references Product(product_id) on delete cascade on update cascade,
+)
